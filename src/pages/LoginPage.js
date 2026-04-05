@@ -17,6 +17,7 @@ function LoginPage({ onLoginSuccess }) {
     age: ''
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {

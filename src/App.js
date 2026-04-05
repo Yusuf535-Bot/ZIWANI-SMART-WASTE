@@ -7,7 +7,7 @@ import RedemptionPage from './pages/RedemptionPage';
 import PointsHistoryPage from './pages/PointsHistoryPage';
 import ProfilePage from './pages/ProfilePage';
 import LogoutModal from './pages/LogoutModal';
-import { getStoredUser } from './utils/authUtils';
+import { getStoredUser, logout } from './utils/authUtils';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -33,6 +33,7 @@ function App() {
   };
 
   const handleLogoutComplete = () => {
+    logout();
     setShowLogoutModal(false);
     setCurrentUser(null);
     setCurrentPage('login');

@@ -27,6 +27,32 @@ export const logout = () => {
   authAPI.logout();
 };
 
+// Mock functions for Forgot Password flow
+export const sendOTPToPhone = (preferredName) => {
+  // Mock implementation for demo purposes
+  if (!preferredName) return { success: false, error: 'Username required' };
+  return {
+    success: true,
+    phoneNumber: '+254 7XX XXX 123',
+    otp: '1234',
+    expiresIn: 300 // 5 minutes in seconds
+  };
+};
+
+export const verifyOTP = (preferredName, otp) => {
+  if (otp === '1234') {
+    return { success: true };
+  }
+  return { success: false, error: 'Invalid OTP. Please try again.' };
+};
+
+export const resetPassword = (preferredName, newPassword, confirmPassword) => {
+  if (newPassword !== confirmPassword) {
+    return { success: false, error: 'Passwords do not match' };
+  }
+  return { success: true };
+};
+
 // Check if user is authenticated
 export const isAuthenticated = () => {
   return !!localStorage.getItem('authToken');
