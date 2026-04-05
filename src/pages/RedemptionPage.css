@@ -1,0 +1,224 @@
+.redemption-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.redemption-header {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.redemption-header h1 {
+  margin: 0 0 10px;
+  color: #1a1a1a;
+  font-size: 28px;
+}
+
+.current-points {
+  color: #2E7D32;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 10px 0 0;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: #2E7D32;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-btn:hover {
+  border-color: #2E7D32;
+  color: #2E7D32;
+}
+
+.category-btn.active {
+  background: #2E7D32;
+  color: white;
+  border-color: #2E7D32;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.item-card {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  border-color: #2E7D32;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+}
+
+.item-card.selected {
+  background: #e8f5e9;
+  border-color: #2E7D32;
+}
+
+.item-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 10px 0 5px;
+  font-size: 14px;
+}
+
+.item-points {
+  color: #2E7D32;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.item-description {
+  color: #999;
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+.message {
+  background: #c8e6c9;
+  color: #1b5e20;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #2E7D32;
+}
+
+.error {
+  background: #ffcdd2;
+  color: #b71c1c;
+  border-left-color: #D32F2F;
+}
+
+.action-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-section p {
+  color: #666;
+  margin: 0 0 20px;
+}
+
+.redemption-button {
+  background: #2E7D32;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.redemption-button:hover:not(:disabled) {
+  background: #1b5e20;
+}
+
+.redemption-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease infinite;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .redemption-page {
+    padding: 10px;
+  }
+
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .categories {
+    gap: 8px;
+  }
+
+  .category-btn {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  .item-icon {
+    font-size: 32px;
+  }
+
+  .redemption-header h1 {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,227 @@
+.points-history-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.history-header {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #2E7D32;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.history-header h1 {
+  margin: 10px 0 5px;
+  color: #1a1a1a;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+.history-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 300px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.empty-state h2 {
+  color: #1a1a1a;
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+.empty-state p {
+  color: #666;
+  margin: 10px 0 30px;
+  font-size: 14px;
+}
+
+.primary-button {
+  background: #2E7D32;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.primary-button:hover {
+  background: #1b5e20;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.history-item {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #2E7D32;
+  background: #f9f9f9;
+  transition: background 0.2s ease;
+}
+
+.history-item.redeemed {
+  border-left-color: #D32F2F;
+}
+
+.history-item:hover {
+  background: #f0f0f0;
+}
+
+.history-badge {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-item.redeemed .history-badge {
+  background: #ffebee;
+}
+
+.badge-icon {
+  font-size: 20px;
+}
+
+.history-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.history-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-type {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+.points-value {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.history-detail {
+  color: #555;
+  margin: 0;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.history-date {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 0 10px;
+}
+
+.summary-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.summary-card h3 {
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+}
+
+.summary-value {
+  color: #2E7D32;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .history-header {
+    padding: 15px;
+  }
+
+  .history-header h1 {
+    font-size: 24px;
+  }
+
+  .history-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .summary-card {
+    padding: 15px;
+  }
+
+  .summary-value {
+    font-size: 24px;
+  }
+}
