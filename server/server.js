@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
 
 dotenv.config();
 
@@ -15,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000', // React app
+  origin: true, // Allow all origins for testing
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
@@ -51,10 +54,26 @@ app.use((req, res) => {
 // Initialize database and start server
 initializeDatabase()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Ziwani backend server running on http://localhost:${PORT}`);
-      console.log(`API endpoints available at http://localhost:${PORT}/api`);
-    });
+    // Check if HTTPS is enabled
+    const useHTTPS = process.env.HTTPS === 'true';
+    
+    if (useHTTPS) {
+      // For development, create self-signed certificate
+      const options = {
+        key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+        cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+      };
+      
+      https.createServer(options, app).listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Ziwani backend server running on https://0.0.0.0:${PORT}`);
+        console.log(`API endpoints available at https://0.0.0.0:${PORT}/api`);
+      });
+    } else {
+      app.listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Ziwani backend server running on http://0.0.0.0:${PORT}`);
+        console.log(`API endpoints available at http://0.0.0.0:${PORT}/api`);
+      });
+    }
   })
   .catch((err) => {
     console.error('Failed to start server:', err);

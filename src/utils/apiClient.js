@@ -22,8 +22,8 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid
+    if (error.response?.status === 401 && !error.config.url.includes('/auth/login') && !error.config.url.includes('/auth/signup')) {
+      // Token expired or invalid (but not for login/signup)
       localStorage.removeItem('authToken');
       localStorage.removeItem('takaRangerUser');
       window.location.href = '/';
@@ -36,35 +36,43 @@ apiClient.interceptors.response.use(
 export const authAPI = {
   login: async (preferredName, password) => {
     try {
+      console.log('API: Sending login request...'); // Debug
       const response = await apiClient.post('/auth/login', {
         preferredName,
         password
       });
+      console.log('API: Login response received:', response.data); // Debug
       if (response.data.success) {
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('takaRangerUser', JSON.stringify(response.data.user));
+        console.log('API: Token and user stored in localStorage'); // Debug
       }
       return response.data;
     } catch (error) {
+      console.error('API: Login error:', error); // Debug
       return {
         success: false,
-        error: error.response?.data?.error || 'Login failed'
+        error: error.response?.data?.error || error.message || 'Login failed'
       };
     }
   },
 
   signup: async (userData) => {
     try {
+      console.log('API: Sending signup request...'); // Debug
       const response = await apiClient.post('/auth/signup', userData);
+      console.log('API: Signup response received:', response.data); // Debug
       if (response.data.success) {
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('takaRangerUser', JSON.stringify(response.data.user));
+        console.log('API: Token and user stored in localStorage'); // Debug
       }
       return response.data;
     } catch (error) {
+      console.error('API: Signup error:', error); // Debug
       return {
         success: false,
-        error: error.response?.data?.error || 'Signup failed'
+        error: error.response?.data?.error || error.message || 'Signup failed'
       };
     }
   },
