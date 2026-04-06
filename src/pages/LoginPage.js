@@ -7,6 +7,7 @@ import ForgotPasswordModal from './ForgotPasswordModal';
 function LoginPage({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     preferredName: '',
     password: '',
@@ -17,6 +18,7 @@ function LoginPage({ onLoginSuccess }) {
     age: ''
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -26,6 +28,7 @@ function LoginPage({ onLoginSuccess }) {
       [name]: value
     }));
     setError('');
+    setSuccessMessage('');
   };
 
   const validateForm = () => {
@@ -42,7 +45,8 @@ function LoginPage({ onLoginSuccess }) {
         return false;
       }
 
-      if (formData.age < 8) {
+      const age = parseInt(formData.age);
+      if (isNaN(age) || age < 8) {
         setError('You must be at least 8 years old');
         return false;
       }
@@ -56,6 +60,11 @@ function LoginPage({ onLoginSuccess }) {
         setError('Preferred name must be at least 2 characters');
         return false;
       }
+
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        return false;
+      }
     }
 
     return true;
@@ -63,46 +72,76 @@ function LoginPage({ onLoginSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted:', { isLogin, formData }); // Debug log
     
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      console.log('Form validation failed'); // Debug log
+      return;
+    }
 
     setLoading(true);
     setError('');
 
-    if (isLogin) {
-      // Login logic
-      const result = await validateLogin(formData.preferredName, formData.password);
-      
-      if (!result.success) {
-        setError(result.error);
-        setLoading(false);
-        return;
-      }
+    try {
+      if (isLogin) {
+        // Login logic
+        console.log('Attempting login...'); // Debug log
+        const result = await validateLogin(formData.preferredName, formData.password);
+        console.log('Login result:', result); // Debug log
+        
+        if (!result.success) {
+          setError(result.error || 'Login failed. Please check your credentials.');
+          setLoading(false);
+          return;
+        }
 
-      // Successful login
-      onLoginSuccess(result.user);
-    } else {
-      // Signup logic
-      const result = await createUser({
-        fullName: formData.fullName,
-        phoneNumber: formData.phoneNumber,
-        location: formData.location,
-        age: parseInt(formData.age),
-        preferredName: formData.preferredName,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword
-      });
-
-      if (!result.success) {
-        setError(result.error);
-        setLoading(false);
+        // Successful login
+        console.log('Login successful, calling onLoginSuccess'); // Debug log
+        onLoginSuccess(result.user);
+      } else {
+        // Signup logic
+        console.log('Attempting signup...'); // Debug log
+        const result = await createUser({
+          fullName: formData.fullName,
+          phoneNumber: formData.phoneNumber,
+          location: formData.location,
+          age: parseInt(formData.age),
+          preferredName: formData.preferredName,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword
+        });
+        console.log('Signup result:', result); // Debug log
+        
+        if (!result.success) {
+          setError(result.error || 'Signup failed. Please try again.');
+          setLoading(false);
         return;
       }
 
       // Successful signup
-      onLoginSuccess(result.user);
+        console.log('Signup successful, calling onLoginSuccess'); // Debug log
+        onLoginSuccess(result.user);
+      }
+    } catch (err) {
+      console.error('Error during auth:', err); // Debug log
+      setError('An unexpected error occurred. Please try again.');
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      preferredName: '',
+      password: '',
+      confirmPassword: '',
+      fullName: '',
+      phoneNumber: '',
+      location: '',
+      age: ''
+    });
+    setShowPassword(false);
+    setError('');
+    setSuccessMessage('');
   };
 
   return (
@@ -122,15 +161,7 @@ function LoginPage({ onLoginSuccess }) {
               onClick={() => {
                 setIsLogin(true);
                 setError('');
-                setFormData({
-                  preferredName: '',
-                  password: '',
-                  confirmPassword: '',
-                  fullName: '',
-                  phoneNumber: '',
-                  location: '',
-                  age: ''
-                });
+                resetForm();
               }}
               type="button"
             >
@@ -141,15 +172,7 @@ function LoginPage({ onLoginSuccess }) {
               onClick={() => {
                 setIsLogin(false);
                 setError('');
-                setFormData({
-                  preferredName: '',
-                  password: '',
-                  confirmPassword: '',
-                  fullName: '',
-                  phoneNumber: '',
-                  location: '',
-                  age: ''
-                });
+                resetForm();
               }}
               type="button"
             >
@@ -178,15 +201,25 @@ function LoginPage({ onLoginSuccess }) {
 
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="••••••••"
-                    required
-                  />
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </button>
+                  </div>
                   <p className="form-hint">Demo: password123 or demo2024</p>
                   <button 
                     type="button"
@@ -269,28 +302,48 @@ function LoginPage({ onLoginSuccess }) {
 
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="••••••••"
-                    required
-                  />
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="confirmPassword">Confirm Password</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    placeholder="••••••••"
-                    required
-                  />
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </button>
+                  </div>
                 </div>
               </>
             )}
@@ -322,15 +375,7 @@ function LoginPage({ onLoginSuccess }) {
           setSuccessMessage('✓ Password reset successfully! Please login with your new password.');
           setTimeout(() => {
             setSuccessMessage('');
-            setFormData({
-              preferredName: '',
-              password: '',
-              confirmPassword: '',
-              fullName: '',
-              phoneNumber: '',
-              location: '',
-              age: ''
-            });
+            resetForm();
           }, 5000);
         }}
       />
